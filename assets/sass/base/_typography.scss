@@ -44,7 +44,7 @@
 			'border-bottom-color #{_duration(transition)} ease',
 			'color #{_duration(transition)} ease'
 		));
-		border-bottom: dotted 1px _palette(border2);
+		border-bottom: 1px _palette(border2);
 		color: _palette(accent, bg);
 		text-decoration: none;
 
