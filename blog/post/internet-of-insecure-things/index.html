@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+<meta charset="utf-8" />
+<meta name="author" content="Nishaanth Guna" />
+<meta name="description" content="Personal blog." />
+<meta name="keywords" content="blog, tech, security, pentest, bounty, vulnerability" />
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="generator" content="Hugo 0.41" />
+
+<link rel="canonical" href="https://ifc0nf1g.xyz/blog/post/internet-of-insecure-things/">
+<base href="https://ifc0nf1g.xyz/blog/" />
+<meta property="og:title" content="Internet of Insecure Things" />
+<meta property="og:description" content="A couple of weeks back, I got the opportunity of pentesting an IoT device. To give a brief background, it was a Pi running Apache which served static content. Recently, there has been a lot of focus on IoT security, especially after the havoc created by malware like Mirai, VPNFilter, ForgotDoor. Following post contains details of how a simple configuration flaw led to code execution in one of the IoT devices." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ifc0nf1g.xyz/blog/post/internet-of-insecure-things/" />
+
+
+
+<meta property="article:published_time" content="2018-06-03T18:29:58&#43;05:30"/>
+
+<meta property="article:modified_time" content="2018-06-03T18:29:58&#43;05:30"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Internet of Insecure Things"/>
+<meta name="twitter:description" content="A couple of weeks back, I got the opportunity of pentesting an IoT device. To give a brief background, it was a Pi running Apache which served static content. Recently, there has been a lot of focus on IoT security, especially after the havoc created by malware like Mirai, VPNFilter, ForgotDoor. Following post contains details of how a simple configuration flaw led to code execution in one of the IoT devices."/>
+
+
+
+<meta itemprop="name" content="Internet of Insecure Things">
+<meta itemprop="description" content="A couple of weeks back, I got the opportunity of pentesting an IoT device. To give a brief background, it was a Pi running Apache which served static content. Recently, there has been a lot of focus on IoT security, especially after the havoc created by malware like Mirai, VPNFilter, ForgotDoor. Following post contains details of how a simple configuration flaw led to code execution in one of the IoT devices.">
+
+
+<meta itemprop="datePublished" content="2018-06-03T18:29:58&#43;05:30" />
+<meta itemprop="dateModified" content="2018-06-03T18:29:58&#43;05:30" />
+<meta itemprop="wordCount" content="522">
+
+
+
+<meta itemprop="keywords" content="" />
+
+
+<link rel="stylesheet" href="css/layout.css" />
+<style type="text/css">
+body {
+  background-color: #101010;
+  color: #dbdbdb;
+}
+
+a { color: #dbdbdb; }
+
+pre {
+  background: #1D1F21;
+  border: 1px solid #dbdbdb;
+  border-radius: 5px;
+}
+
+code {
+  background: #1D1F21;
+}
+
+blockquote {
+  background: #1D1F21;
+  border-left: 3px solid #dbdbdb;
+}
+
+table {
+  margin: 1em auto;
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border: 1px solid #dbdbdb;
+}
+
+th {
+  background: #dbdbdb;
+  color: #101010;
+}
+
+.siteTitle a { color: #99cc66; }
+
+.post .content h1{ color: #99cc66; }
+.post .content h2{ color: #99cc66; }
+.post .content h3{ color: #99cc66; }
+.post .content h4{ color: #99cc66; }
+.post .content h5{ color: #99cc66; }
+.post .content h6{ color: #99cc66; }
+.post .content a:hover { color: #99cc66; }
+.social-link:hover { color: #99cc66; }
+.nav-item-title:hover { color: #99cc66; }
+.tag a:hover { color: #99cc66; }
+.copyright { color: #404040 }
+.poweredby { color: #404040 }
+.poweredby a { color: #404040; }
+.post-preview .title a{ color: #99cc66; }
+.content-item a:hover{
+  text-decoration: underline;
+  color: #99cc66;
+}
+.post-list .title { color: #99cc66; }
+.rmore { color: #99cc66; }
+.terms .term a:hover {
+  text-decoration: underline;
+  color: #99cc66;
+}
+
+</style>
+
+
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-52576918-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='//www.google-analytics.com/analytics.js'></script>
+
+
+<title>
+
+
+     Internet of Insecure Things 
+
+</title>
+
+</head>
+
+
+<body>
+<div class="main">
+<header>
+
+<div class="header-bar">
+
+  <nav>
+    <div class="siteTitle">
+      <a href="https://ifc0nf1g.xyz/blog/">ls -l /var/www/blog</a>
+    </div> 
+
+    
+    
+    <a class="nav-item" href="https://ifc0nf1g.xyz/blog/post/"><div class="nav-item-title">Posts</div></a>
+    
+    <a class="nav-item" href="https://ifc0nf1g.xyz/blog/about/"><div class="nav-item-title">About</div></a>
+    
+
+  </nav>
+</div>
+
+
+
+</header>
+
+
+<article class="post">
+    <h1 class="title"> Internet of Insecure Things </h1>
+    <div class="content"> <p>A couple of weeks back, I got the opportunity of pentesting an IoT device. To give a brief background, it was a  Pi running Apache which served static content. Recently, there has been a lot of focus on IoT security, especially after the havoc created by malware like <a href="https://en.wikipedia.org/wiki/Mirai_malware">Mirai</a>, <a href="https://www.bleepingcomputer.com/news/security/the-vpnfilter-botnet-is-attempting-a-comeback/">VPNFilter</a>, <a href="https://blog.newskysecurity.com/forgotdoor-routers-in-singapore-accidentally-give-complete-access-to-potential-iot-attackers-ed60895c5042">ForgotDoor</a>. Following post contains details of how a simple configuration flaw led to code execution in one of the IoT devices.</p>
+
+<p>First things first, I wanted to check what ports are exposed and what services are run on the device. The NSE script <a href="https://nmap.org/nsedoc/scripts/http-git.html">http-git</a> had found that the .git/ folder is public and the application is written in PHP which nmap guessed from the .gitignore file.</p>
+
+<pre><code>[nishaanthguna:~/pentest]$ nmap -vvv -A -Pn -p- http://website.com
+Starting Nmap 7.70 ( https://nmap.org ) at 2018-01-18 12:46 IST
+...
+PORT   STATE SERVICE REASON  VERSION
+80/tcp open  http    syn-ack Apache httpd 2.4.25 ((Raspbian))
+| http-git:
+|   102.X.X.X:80/.git/
+|     Git repository found!
+|     .git/config matched patterns 'user'
+|     .git/COMMIT_EDITMSG matched patterns 'passw' 'user' 'uid'
+|     Repository description: Unnamed repository; edit this file 'description'...
+|     Last commit message: &lt;!DOCTYPE html&gt; &lt;html&gt; &lt;head&gt; &lt;meta charset=&quot;utf-8&quot;&gt; ...
+|     Remotes:
+|       https://github.com/someuser/something.git
+|_    Project type: PHP application (guessed from .gitignore)
+</code></pre>
+
+<p>Great! We can recursively <a href="https://stackoverflow.com/questions/273743/using-wget-to-recursively-fetch-a-directory-with-arbitrary-files-in-it">download</a> the .git folder from the webpage and try to rebuild the repository.</p>
+
+<pre><code>[nishaanthguna:~/pentest]$ wget --mirror --include-directories=/.git http://website.com/.git/
+Connecting to website.com (website.com)|102.x.x.x|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 3408 (3.3K)
+...
+
+[nishaanthguna:~/pentest]$ git reset --hard
+HEAD is now at d2cvae8 Tampered but not notified
+</code></pre>
+
+<p>On hard resetting, it reverts back to the previous commit throwing away all the uncommitted changes. On grepping for passwords, there was a temporary file with database password in cleartext.</p>
+
+<p><img src="https://ifc0nf1g.xyz/blog/images/db-config-password.jpg" alt="db-config-password" /></p>
+
+<p>The MySQL port 3306 was open and was accessible from outside the box. After this, I wanted to escalate this to execute commands. While researching, found a <a href="http://0haxor.blogspot.com/2012/08/into-outfile-uploading-your-shell-with.html">blog</a> which explains how to upload shells by exploiting SQL Injection. That would work.</p>
+
+<p>Tried to push a simple PHP shell into the webroot which executes commands passed through URL parameters.</p>
+
+<p><img src="https://ifc0nf1g.xyz/blog/images/shell-error.jpg" alt="shell-error" /></p>
+
+<p>Maybe the Apache server and MySQL server are owned by two different users and the MySQL user does not have permission to write to the webroot. After this, I was reading about other techniques to execute commands but most of them pointed towards the same thing except for <a href="https://osandamalith.com/2018/02/11/mysql-udf-exploitation/">UDF exploitation</a>. Unfortunately, the plugin folder of MySQL also didn&rsquo;t have write permissions rendering the above technique unusable.</p>
+
+<p>Just when I was about to give up, <a href="https://twitter.com/ja99u">Jaggu</a> suggested me to try writing the shell in all the directories and not only webroot. And, it worked! I was able to upload the shell in downloads/ folder because of misconfigured permissions.</p>
+
+<p><img src="https://ifc0nf1g.xyz/blog/images/shell-success.jpg" alt="shell-success" /></p>
+
+<p>From here, I was able to get a reverse shell using <a href="https://highon.coffee/blog/reverse-shell-cheat-sheet/#python-reverse-shell">Python.</a></p>
+
+<p><img src="https://ifc0nf1g.xyz/blog/images/shell-py.jpg" alt="python-shell" />
+<img src="https://ifc0nf1g.xyz/blog/images/shell-py2.jpg" alt="python-shell2" /></p>
+
+<p>To elevate the permission to root, I tried running dirtycow which had been patched. Tried a few other exploits which didn&rsquo;t work either.</p>
+
+<p>If you are want to keep yourself updated about IoT malware, I highly recommend following <a href="https://twitter.com/ankit_anubhav">Ankit</a>.</p>
+
+<p>Think I should have approached the target differently? Or used a specific exploit to root the box? Please do let know your feedback and comments below.</p>
+ </div>
+    <footer class="post-footer">
+
+  <div class="post-footer-data">
+    
+<div class="tags">
+    
+</div>
+
+    <div class="date"> Jun 3, 2018 </div>
+  </div>
+
+</footer>
+
+
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "ifc0nf1gxyz" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+</article>
+
+  <footer>
+
+  <div class="social-links-footer">
+
+  
+
+  
+  <a href="https://github.com/gameFace22" target="_blank"><div class="social-link">GitHub</div></a>
+  
+
+  
+
+  
+  <a href="https://twitter.com/67616d654661636" target="_blank"><div class="social-link">Twitter</div></a>
+  
+
+  
+  <a href="https://www.linkedin.com/in/nishaanthguna" target="_blank"><div class="social-link">LinkedIn</div></a>
+  
+
+  <div class="social-link">
+  <a href="https://ifc0nf1g.xyz/blog/index.xml" target="_blank">RSS</a>
+  </div>
+
+</div>
+
+
+  <div class="copyright"> Copyright (c) 2017, all rights reserved. </div>
+
+  <div class="poweredby">
+    Powered by <a href="https://gohugo.io/">Hugo</a>.
+  </div>
+
+  </footer>
+
+</div> 
+
+</body>
+</html>
+
