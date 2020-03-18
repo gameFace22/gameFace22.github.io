@@ -9,13 +9,13 @@
 <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
 <meta name="generator" content="Hugo 0.41" />
 
-<link rel="canonical" href="https://ifc0nf1g.xyz/blog/post/pwning-admin-panel-with-recon/">
-<base href="https://ifc0nf1g.xyz/blog/" />
+<link rel="canonical" href="https://gameface22.github.io/blog/post/pwning-admin-panel-with-recon/">
+<base href="https://gameface22.github.io/blog/" />
 <meta property="og:title" content="Pwning admin panel with recon" />
 <meta property="og:description" content="Reconnaissance is one of the interesting and most critical parts of penetration testing. Using recon, one could yield API endpoints, sensitive files/folders, juicy subdomains and so on. During a recent engagement, I was able to get access to the administrative panel due to lack of authorization and sensitive files being published publicly.
 Let us start with analysing the iOS application statically. On going through the Info.plist, we can see that there is a URL hardcoded." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://ifc0nf1g.xyz/blog/post/pwning-admin-panel-with-recon/" />
+<meta property="og:url" content="https://gameface22.github.io/blog/post/pwning-admin-panel-with-recon/" />
 
 
 
@@ -152,14 +152,14 @@ if (!doNotTrack) {
 
   <nav>
     <div class="siteTitle">
-      <a href="https://ifc0nf1g.xyz/blog/">ls -l /var/www/blog</a>
+      <a href="https://gameface22.github.io/blog/">ls -l /var/www/blog</a>
     </div> 
 
     
     
-    <a class="nav-item" href="https://ifc0nf1g.xyz/blog/post/"><div class="nav-item-title">Posts</div></a>
+    <a class="nav-item" href="https://gameface22.github.io/blog/post/"><div class="nav-item-title">Posts</div></a>
     
-    <a class="nav-item" href="https://ifc0nf1g.xyz/blog/about/"><div class="nav-item-title">About</div></a>
+    <a class="nav-item" href="https://gameface22.github.io/blog/about/"><div class="nav-item-title">About</div></a>
     
 
   </nav>
@@ -183,11 +183,11 @@ if (!doNotTrack) {
 
 <p>Traversing the URL, we get a page with link to the Swagger UI.</p>
 
-<p><img src="https://ifc0nf1g.xyz/blog/images/traverse-swagger.jpg" alt="swagger" /></p>
+<p><img src="https://gameface22.github.io/blog/images/traverse-swagger.jpg" alt="swagger" /></p>
 
 <p>Looking through the <a href="https://swagger.io/swagger-ui/">documentation</a>, we can see that Swagger UI can be used to visualize and interact with API&rsquo;s resources and that it is automatically generated from the specification. Following was the UI page retrieved while visiting the URL found from the previous step.</p>
 
-<p><img src="https://ifc0nf1g.xyz/blog/images/admin-swagger.jpg" alt="admin-swagger" /></p>
+<p><img src="https://gameface22.github.io/blog/images/admin-swagger.jpg" alt="admin-swagger" /></p>
 
 <p>Weirdly, not only API calls made from the mobile application, but also the endpoints which an admin can use to manage users, distribute content, customize the chatbot the app uses were exposed. With the knowledge of extra endpoints, I fired up Burp to see the network traffic. Initially, my idea was to replace the endpoints of the mobile application with the admin endpoints found from Swagger UI to check if there was proper authorization to differentiate between normal and administrative users.</p>
 
@@ -195,7 +195,7 @@ if (!doNotTrack) {
 
 <p>Logged into the mobile application as a normal user, I replaced one of the API calls from /xyz/api/users/account/preferences to /xyz/api/admin/users/count and forwarded the request.</p>
 
-<p><img src="https://ifc0nf1g.xyz/blog/images/admin-count.jpg" alt="admin-count" /></p>
+<p><img src="https://gameface22.github.io/blog/images/admin-count.jpg" alt="admin-count" /></p>
 
 <p>It worked! This means the server does not have any authorization in place. Basically, we can make a request to any API endpoint including /admin, /chatbot, /moderate considering we know the structure of the request body and the headers involved. Let us try to enumerate more with the endpoints from Swagger and escalate this.</p>
 
@@ -229,13 +229,13 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwi
 
 <p>Awesome! Using Burp&rsquo;s Intruder, we can retrieve all the 8 admin&rsquo;s username, e-mail by enumerating the {id} parameter.</p>
 
-<p><img src="https://ifc0nf1g.xyz/blog/images/enumerate-admin.jpg" alt="enumerate-admin" /></p>
+<p><img src="https://gameface22.github.io/blog/images/enumerate-admin.jpg" alt="enumerate-admin" /></p>
 
 <p>Now that we have the admin usernames to login. Let us grab common password list from <a href="https://github.com/danielmiessler/SecLists/tree/master/Passwords/Common-Credentials">Seclists</a> and run a quick bruteforce before reporting.</p>
 
 <p>Luckily, one of the admin users had a weak password and the application didn&rsquo;t have any rate limiting in the login page. With the obtained admin access, we could do anything from adding or removing users, modify the content which is displayed in the mobile application, send notifications to the end users and a lot of interesting things.</p>
 
-<p><img src="https://ifc0nf1g.xyz/blog/images/admin-panel.jpg" alt="admin-panel" /></p>
+<p><img src="https://gameface22.github.io/blog/images/admin-panel.jpg" alt="admin-panel" /></p>
 
 <p>It was fun to put bits and pieces together to get admin access on the web application. I have also written a primer on static analysis of iOS applications at <a href="https://secdevops.ai/ios-static-analysis-and-recon-c611eaa6d108">SecDevOps.</a> Do check it out ;)</p>
 
@@ -300,7 +300,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwi
   
 
   <div class="social-link">
-  <a href="https://ifc0nf1g.xyz/blog/index.xml" target="_blank">RSS</a>
+  <a href="https://gameface22.github.io/blog/index.xml" target="_blank">RSS</a>
   </div>
 
 </div>

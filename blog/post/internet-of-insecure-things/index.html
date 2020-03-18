@@ -9,12 +9,12 @@
 <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
 <meta name="generator" content="Hugo 0.41" />
 
-<link rel="canonical" href="https://ifc0nf1g.xyz/blog/post/internet-of-insecure-things/">
-<base href="https://ifc0nf1g.xyz/blog/" />
+<link rel="canonical" href="https://gameface22.github.io/blog/post/internet-of-insecure-things/">
+<base href="https://gameface22.github.io/blog/" />
 <meta property="og:title" content="Internet of Insecure Things" />
 <meta property="og:description" content="A couple of weeks back, I got the opportunity of pentesting an IoT device. To give a brief background, it was a Pi running Apache which served static content. Recently, there has been a lot of focus on IoT security, especially after the havoc created by malware like Mirai, VPNFilter, ForgotDoor. Following post contains details of how a simple configuration flaw led to code execution in one of the IoT devices." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://ifc0nf1g.xyz/blog/post/internet-of-insecure-things/" />
+<meta property="og:url" content="https://gameface22.github.io/blog/post/internet-of-insecure-things/" />
 
 
 
@@ -149,14 +149,14 @@ if (!doNotTrack) {
 
   <nav>
     <div class="siteTitle">
-      <a href="https://ifc0nf1g.xyz/blog/">ls -l /var/www/blog</a>
+      <a href="https://gameface22.github.io/blog/">ls -l /var/www/blog</a>
     </div> 
 
     
     
-    <a class="nav-item" href="https://ifc0nf1g.xyz/blog/post/"><div class="nav-item-title">Posts</div></a>
+    <a class="nav-item" href="https://gameface22.github.io/blog/post/"><div class="nav-item-title">Posts</div></a>
     
-    <a class="nav-item" href="https://ifc0nf1g.xyz/blog/about/"><div class="nav-item-title">About</div></a>
+    <a class="nav-item" href="https://gameface22.github.io/blog/about/"><div class="nav-item-title">About</div></a>
     
 
   </nav>
@@ -204,24 +204,24 @@ HEAD is now at d2cvae8 Tampered but not notified
 
 <p>On hard resetting, it reverts back to the previous commit throwing away all the uncommitted changes. On grepping for passwords, there was a temporary file with database password in cleartext.</p>
 
-<p><img src="https://ifc0nf1g.xyz/blog/images/db-config-password.jpg" alt="db-config-password" /></p>
+<p><img src="https://gameface22.github.io/blog/images/db-config-password.jpg" alt="db-config-password" /></p>
 
 <p>The MySQL port 3306 was open and was accessible from outside the box. After this, I wanted to escalate this to execute commands. While researching, found a <a href="http://0haxor.blogspot.com/2012/08/into-outfile-uploading-your-shell-with.html">blog</a> which explains how to upload shells by exploiting SQL Injection. That would work.</p>
 
 <p>Tried to push a simple PHP shell into the webroot which executes commands passed through URL parameters.</p>
 
-<p><img src="https://ifc0nf1g.xyz/blog/images/shell-error.jpg" alt="shell-error" /></p>
+<p><img src="https://gameface22.github.io/blog/images/shell-error.jpg" alt="shell-error" /></p>
 
 <p>Maybe the Apache server and MySQL server are owned by two different users and the MySQL user does not have permission to write to the webroot. After this, I was reading about other techniques to execute commands but most of them pointed towards the same thing except for <a href="https://osandamalith.com/2018/02/11/mysql-udf-exploitation/">UDF exploitation</a>. Unfortunately, the plugin folder of MySQL also didn&rsquo;t have write permissions rendering the above technique unusable.</p>
 
 <p>Just when I was about to give up, <a href="https://twitter.com/ja99u">Jaggu</a> suggested me to try writing the shell in all the directories and not only webroot. And, it worked! I was able to upload the shell in downloads/ folder because of misconfigured permissions.</p>
 
-<p><img src="https://ifc0nf1g.xyz/blog/images/shell-success.jpg" alt="shell-success" /></p>
+<p><img src="https://gameface22.github.io/blog/images/shell-success.jpg" alt="shell-success" /></p>
 
 <p>From here, I was able to get a reverse shell using <a href="https://highon.coffee/blog/reverse-shell-cheat-sheet/#python-reverse-shell">Python.</a></p>
 
-<p><img src="https://ifc0nf1g.xyz/blog/images/shell-py.jpg" alt="python-shell" />
-<img src="https://ifc0nf1g.xyz/blog/images/shell-py2.jpg" alt="python-shell2" /></p>
+<p><img src="https://gameface22.github.io/blog/images/shell-py.jpg" alt="python-shell" />
+<img src="https://gameface22.github.io/blog/images/shell-py2.jpg" alt="python-shell2" /></p>
 
 <p>To elevate the permission to root, I tried running dirtycow which had been patched. Tried a few other exploits which didn&rsquo;t work either.</p>
 
@@ -288,7 +288,7 @@ HEAD is now at d2cvae8 Tampered but not notified
   
 
   <div class="social-link">
-  <a href="https://ifc0nf1g.xyz/blog/index.xml" target="_blank">RSS</a>
+  <a href="https://gameface22.github.io/blog/index.xml" target="_blank">RSS</a>
   </div>
 
 </div>

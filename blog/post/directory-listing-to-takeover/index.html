@@ -9,14 +9,14 @@
 <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
 <meta name="generator" content="Hugo 0.41" />
 
-<link rel="canonical" href="https://ifc0nf1g.xyz/blog/post/directory-listing-to-takeover/">
-<base href="https://ifc0nf1g.xyz/blog/" />
+<link rel="canonical" href="https://gameface22.github.io/blog/post/directory-listing-to-takeover/">
+<base href="https://gameface22.github.io/blog/" />
 <meta property="og:title" content="Directory Listing to Account Takeover" />
 <meta property="og:description" content="Directory listing is one of the most common misconfigurations which can be exploited trivially. However, the impact depends on the criticality of the files present inside the directory.
 Recently, during one of my pentests, I came across an interesting open directory which I was able to leverage. On enumerating, I discovered a subdomain which was the staging server and was accessible over the internet.
 [nishaanthguna:~/essentials]$ curl --silent https://crt.sh/\?q\=%.domain.com | sed &#39;s/&lt;\/\?" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://ifc0nf1g.xyz/blog/post/directory-listing-to-takeover/" />
+<meta property="og:url" content="https://gameface22.github.io/blog/post/directory-listing-to-takeover/" />
 
 
 
@@ -155,14 +155,14 @@ if (!doNotTrack) {
 
   <nav>
     <div class="siteTitle">
-      <a href="https://ifc0nf1g.xyz/blog/">ls -l /var/www/blog</a>
+      <a href="https://gameface22.github.io/blog/">ls -l /var/www/blog</a>
     </div> 
 
     
     
-    <a class="nav-item" href="https://ifc0nf1g.xyz/blog/post/"><div class="nav-item-title">Posts</div></a>
+    <a class="nav-item" href="https://gameface22.github.io/blog/post/"><div class="nav-item-title">Posts</div></a>
     
-    <a class="nav-item" href="https://ifc0nf1g.xyz/blog/about/"><div class="nav-item-title">About</div></a>
+    <a class="nav-item" href="https://gameface22.github.io/blog/about/"><div class="nav-item-title">About</div></a>
     
 
   </nav>
@@ -187,14 +187,14 @@ stag.domain.com
 
 <p>On running a port scan, it was found that the port 8080 was open and had a directory listing. There wasn&rsquo;t anything sensitive until I found this.</p>
 
-<p><img src="https://ifc0nf1g.xyz/blog/images/mailgun.png" alt="mailgun" /></p>
+<p><img src="https://gameface22.github.io/blog/images/mailgun.png" alt="mailgun" /></p>
 
 <p>From Mailgun&rsquo;s API <a href="https://documentation.mailgun.com/en/latest/user_manual.html">documentation</a>, it looks like the admininstator can track the  <a href="https://documentation.mailgun.com/en/latest/user_manual.html#tracking-bounces">bounces</a>, <a href="https://documentation.mailgun.com/en/latest/user_manual.html#tracking-opens">clicks</a>, <a href="https://documentation.mailgun.com/en/latest/user_manual.html#tracking-spam-complaints">spam compliants</a>, if the mail got <a href="https://documentation.mailgun.com/en/latest/user_manual.html#tracking-deliveries">delivered</a> or if the user
 <a href="https://documentation.mailgun.com/en/latest/user_manual.html#tracking-unsubscribes">unsubscribed</a> along with the URLs. So, what is the problem here?</p>
 
 <p>Not only the logs leaked personal and developer e-mail addresses, it also did have the reset password links. Something like this,</p>
 
-<p><img src="https://ifc0nf1g.xyz/blog/images/reset-link.png" alt="reset" /></p>
+<p><img src="https://gameface22.github.io/blog/images/reset-link.png" alt="reset" /></p>
 
 <p>An attack scenario would be something similar to,</p>
 
@@ -285,7 +285,7 @@ fi
   
 
   <div class="social-link">
-  <a href="https://ifc0nf1g.xyz/blog/index.xml" target="_blank">RSS</a>
+  <a href="https://gameface22.github.io/blog/index.xml" target="_blank">RSS</a>
   </div>
 
 </div>
